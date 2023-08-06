@@ -5,7 +5,7 @@ Welcome to the Dell PowerProtect Data Manager (PPDM) Automation Examples reposit
 
 ## Introduction
 
-Dell's PowerProtect Data Manager (PPDM) is a Modern Data PRotection Solution for backing up Enterprise workloads (onprem & cloud). This repository aims to demonstrate how to interact with the PPDM REST API using various automation tools and technologies. The examples provided cover a wide range of scenarios, including using Postman collections, Ansible playbooks, Python scripts, integrating with ServiceNow, and creating a custom dashboard.
+Dell's PowerProtect Data Manager (PPDM) is a Modern Data Protection Software for backing up enterprise workloads (onprem & cloud). This repository aims to demonstrate how to interact with the PPDM REST API using various automation tools and technologies. The examples provided cover a wide range of scenarios, including using Postman collections, Ansible playbooks, Python scripts, integrating with ServiceNow, and creating a custom dashboard.
 
 ## Getting Started
 To begin using the examples in this repository, follow these steps:
@@ -14,15 +14,12 @@ Clone this repository to your local machine:
 
 ```
 git clone https://github.com/rjainoje/ppdm-automation.git
-
 ```
 
-Navigate to the cloned repository directory:
-
+Navigate to the corresponding directory:
 
 ```
 cd ppdm-ansible-playbooks
-
 ```
 
 Explore the different folders corresponding to the automation tools and technologies you're interested in.
@@ -42,7 +39,7 @@ This repository includes the following types of examples:
 * [ServiceNow Example](./ppdm-servicenow-example/servicenow-readme.md): Learn how to leverage PPDM's REST API with ServiceNow for streamlined incident management, ticketing, and reporting.
 
 * [Custom Dashboard](https://github.com/rjainoje/rjapp-backup-portal-example/blob/main/readme.md): Build a custom dashboard to visualise PPDM metrics and insights, providing an at-a-glance view of your data management environment.
-![](images/ppdm-postman.PNG)
+![](images/ppdm-postman.png)
 
 ## Folder Structure
 The repository is organized as follows:
