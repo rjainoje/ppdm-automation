@@ -1,0 +1,7405 @@
+{
+	"info": {
+		"_postman_id": "a4262c61-c338-4143-975f-fe908d1e2efd",
+		"name": "PowerProtect 19.12",
+		"description": "Postman collections for Dell PowerProtect Data Manager 19.12",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20422705"
+	},
+	"item": [
+		{
+			"name": "Login and get a Token",
+			"item": [
+				{
+					"name": "Login and get a token - first step",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let token = jsonData.access_token;",
+									"pm.environment.set('authToken', token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{ppdmpasswd}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{ppdmuser}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\":\"{{ppdmuser}}\",\"password\":\"{{ppdmpasswd}}\"}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/login",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Asset Management",
+			"item": [
+				{
+					"name": "Get all Assets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"strictSSL": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets?orderby=orderby&pageSize=10000",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ASSET_SETTING",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"strictSSL": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets?orderby=orderby&pageSize=10000",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get asset ID of a client",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"asset-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets?filter=name eq \"{{asset-name}}\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"{{asset-name}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Asset Details by asset-id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets/{{asset-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets",
+								"{{asset-id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all copies by Asset",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets/{{asset-id}}/copies?pageSize=10000",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets",
+								"{{asset-id}}",
+								"copies"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "state ne \"IDLE\"",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all copy-map by asset id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets/{{asset-id}}/copy-map",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets",
+								"{{asset-id}}",
+								"copy-map"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get latest backup copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/latest-copies?filter=assetId in (\"{{asset-id}}\")",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"latest-copies"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "assetId in (\"{{asset-id}}\")"
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Protection Policies",
+			"item": [
+				{
+					"name": "Get all Protection Policies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Asset-id by asset name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"asset-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets?filter=name eq \"{{asset-name}}\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"{{asset-name}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Policy-id by policy name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"policy-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies?filter=name eq \"{{policy-name}}\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"{{policy-name}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Protection Policy by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies/{{policy-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies",
+								"{{policy-id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Assets by Protection Policy id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies/{{policy-id}}/asset-assignments?pageSize=10000",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies",
+								"{{policy-id}}",
+								"asset-assignments"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Policy - Add Asset by asset-id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\"{{asset-id}}\"]"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies/{{policy-id}}/asset-assignments",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies",
+								"{{policy-id}}",
+								"asset-assignments"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Inventroy Soure Management",
+			"item": [
+				{
+					"name": "Get all Inventory Sources",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"inventory-id\", data.content[0].name);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/inventory-sources?pageSize=10000",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"inventory-sources"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get an Inventory Sources by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/inventory-sources/{{inventory-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"inventory-sources",
+								"{{inventory-id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Monitoring",
+			"item": [
+				{
+					"name": "Get all Alerts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"alert-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/alerts?pageSize=10000",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"alerts"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Alerts - only failures",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"alert-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/alerts?pageSize=10000&filter=severity eq \"CRITICAL\" and postedTime gt 2021-03-03T12:04:04.247710",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"alerts"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								},
+								{
+									"key": "filter",
+									"value": "severity eq \"CRITICAL\" and postedTime gt 2021-03-03T12:04:04.247710"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Alert acknowledgement",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"acknowledgement\": {\r\n    \"acknowledgeState\": \"ACKNOWLEDGED\"\r\n  },\r\n  \"messageIds\": [\r\n    \"{{alert-id}}\"\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/alerts/acknowledgements",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"alerts",
+								"acknowledgements"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get an Alert message by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/alerts/{{alert-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"alerts",
+								"{{alert-id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all AuditLogs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"audit-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/audit-logs?pageSize=10000",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"audit-logs"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get an AuditLog resource by ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/audit-logs/{{audit-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"audit-logs",
+								"{{audit-id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Activities",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"activity-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/activities?filter=category eq \"PROTECT\" and classType eq \"JOB_GROUP\" and state eq \"COMPLETED\" and createdTime gt 022-05-27T18:21:33.087379Z&pageSize=100",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "category eq \"PROTECT\" and classType eq \"JOB_GROUP\" and state eq \"COMPLETED\" and createdTime gt 022-05-27T18:21:33.087379Z"
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Activities  - all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"activity-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/activities?orderby=createTime DESC&pageSize=100",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "category eq \"PROTECT\" and classType eq \"TASK\" and state eq \"COMPLETED\" and createdTime gt 2022-03-03T12:04:04.247710",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "createTime DESC"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all tasks Activities  - last hour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// var moment = require('moment');\r",
+									"// pm.environment.set('currentdate', moment().format((\"YYYY-MM-DDTHH:mm:ssZ\")));\r",
+									"\r",
+									"// var date = new Date().toISOString(true); \r",
+									"// pm.environment.set(\"todaydate\", date);\r",
+									"\r",
+									"var moment = require(\"moment\")\r",
+									"// pm.environment.set(\"pickUpTime\", moment().toISOString())\r",
+									"// pm.environment.set(\"pickUpTime\", moment().subtract(10, 'day').toISOString())\r",
+									"pm.environment.set(\"pickUpTime\", moment().subtract(24, 'hour').toISOString())"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/activities?orderby=createTime DESC&pageSize=10000&filter=category eq \"PROTECT\" and classType eq \"TASK\" and state eq \"COMPLETED\" and createdTime gt \"{{pickUpTime}}\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "createTime DESC"
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "category eq \"PROTECT\" and classType eq \"TASK\" and state eq \"COMPLETED\" and createdTime gt \"{{pickUpTime}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all jobs Activities  - last hour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// var moment = require('moment');\r",
+									"// pm.environment.set('currentdate', moment().format((\"YYYY-MM-DDTHH:mm:ssZ\")));\r",
+									"\r",
+									"// var date = new Date().toISOString(true); \r",
+									"// pm.environment.set(\"todaydate\", date);\r",
+									"\r",
+									"var moment = require(\"moment\")\r",
+									"// pm.environment.set(\"pickUpTime\", moment().toISOString())\r",
+									"// pm.environment.set(\"pickUpTime\", moment().subtract(10, 'day').toISOString())\r",
+									"pm.environment.set(\"pickUpTime\", moment().subtract(24, 'hour').toISOString())"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/activities?orderby=createTime DESC&pageSize=10000&filter=category eq \"PROTECT\" and classType eq \"JOB\" and state eq \"COMPLETED\" and createdTime gt \"{{pickUpTime}}\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "createTime DESC"
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "category eq \"PROTECT\" and classType eq \"JOB\" and state eq \"COMPLETED\" and createdTime gt \"{{pickUpTime}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all jobgroups Activities  - last hour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// var moment = require('moment');\r",
+									"// pm.environment.set('currentdate', moment().format((\"YYYY-MM-DDTHH:mm:ssZ\")));\r",
+									"\r",
+									"// var date = new Date().toISOString(true); \r",
+									"// pm.environment.set(\"todaydate\", date);\r",
+									"\r",
+									"var moment = require(\"moment\")\r",
+									"// pm.environment.set(\"pickUpTime\", moment().toISOString())\r",
+									"// pm.environment.set(\"pickUpTime\", moment().subtract(10, 'day').toISOString())\r",
+									"pm.environment.set(\"pickUpTime\", moment().subtract(24, 'hour').toISOString())"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/activities?orderby=createTime DESC&pageSize=10000&filter=category eq \"PROTECT\" and classType eq \"JOB_GROUP\" and state eq \"COMPLETED\" and createdTime gt \"{{pickUpTime}}\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "createTime DESC"
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "category eq \"PROTECT\" and classType eq \"JOB_GROUP\" and state eq \"COMPLETED\" and createdTime gt \"{{pickUpTime}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Activities  - last hour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// var moment = require('moment');\r",
+									"// pm.environment.set('currentdate', moment().format((\"YYYY-MM-DDTHH:mm:ssZ\")));\r",
+									"\r",
+									"// var date = new Date().toISOString(true); \r",
+									"// pm.environment.set(\"todaydate\", date);\r",
+									"\r",
+									"var moment = require(\"moment\")\r",
+									"// pm.environment.set(\"pickUpTime\", moment().toISOString())\r",
+									"// pm.environment.set(\"pickUpTime\", moment().subtract(10, 'day').toISOString())\r",
+									"pm.environment.set(\"pickUpTime\", moment().subtract(1, 'hour').toISOString())"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/activities?orderby=createTime DESC&pageSize=10000&filter=category eq \"PROTECT\" and createTime gt \"{{pickUpTime}}\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "createTime DESC"
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "category eq \"PROTECT\" and createTime gt \"{{pickUpTime}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get OK tasks Activities - last hour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var moment = require(\"moment\")\r",
+									"// pm.environment.set(\"pickUpTime\", moment().toISOString())\r",
+									"// pm.environment.set(\"pickUpTime\", moment().subtract(10, 'day').toISOString())\r",
+									"pm.environment.set(\"pickUpTime\", moment().subtract(1, 'hour').toISOString())"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/activities?pageSize=10000&orderby=createTime DESC&filter=category eq \"PROTECT\" and classType eq \"TASK\" and state eq \"COMPLETED\" and result.status eq \"OK\" and createTime gt \"{{pickUpTime}}\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								},
+								{
+									"key": "orderby",
+									"value": "createTime DESC"
+								},
+								{
+									"key": "filter",
+									"value": "category eq \"PROTECT\" and classType eq \"TASK\" and state eq \"COMPLETED\" and result.status eq \"OK\" and createTime gt \"{{pickUpTime}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get FAILED tasks Activities - last hour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var moment = require(\"moment\")\r",
+									"// pm.environment.set(\"pickUpTime\", moment().toISOString())\r",
+									"// pm.environment.set(\"pickUpTime\", moment().subtract(10, 'day').toISOString())\r",
+									"pm.environment.set(\"pickUpTime\", moment().subtract(1, 'hour').toISOString())"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/activities?pageSize=10000&orderby=createTime DESC&filter=category eq \"PROTECT\" and classType eq \"TASK\" and state eq \"COMPLETED\" and result.status eq \"FAILED\" and createTime gt \"{{pickUpTime}}\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								},
+								{
+									"key": "orderby",
+									"value": "createTime DESC"
+								},
+								{
+									"key": "filter",
+									"value": "category eq \"PROTECT\" and classType eq \"TASK\" and state eq \"COMPLETED\" and result.status eq \"FAILED\" and createTime gt \"{{pickUpTime}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get an Activity by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/activities/{{activity-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"activities",
+								"{{activity-id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Compliance",
+			"item": [
+				{
+					"name": "Get all Compliance Results",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/compliance-results",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"compliance-results"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Compliance Details",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/compliance-details",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"compliance-details"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Compliance Settings",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/common-settings/COMPLIANCE_SETTING",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"common-settings",
+								"COMPLIANCE_SETTING"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "License Management",
+			"item": [
+				{
+					"name": "All license info",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/licenses",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"licenses"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Server Management",
+			"item": [
+				{
+					"name": "All license info",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/server-disaster-recovery-backups",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"server-disaster-recovery-backups"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get DR backup info",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/server-disaster-recovery-backups",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"server-disaster-recovery-backups"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "common-settings",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/common-settings",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"common-settings"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Storage Management",
+			"item": [
+				{
+					"name": "Get all storage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"storage-system-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/storage-systems",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"storage-systems"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get protection storage metrics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/data-targets",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"data-targets"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all cloud-units by Storage System ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "data = JSON.parse(responseBody)\r\npm.environment.set(\"storage-system-id\", data.content[0].id);"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/datadomain-cloud-units/{{storage-system-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"datadomain-cloud-units",
+								"{{storage-system-id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all DD mtrees",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/datadomain-mtrees",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"datadomain-mtrees"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dedupe",
+			"item": []
+		},
+		{
+			"name": "Use Case 1 - Add Data Domain",
+			"item": [
+				{
+					"name": "Step1 - Trust the server certificate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/certificates",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"certificates"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Determine if the Data Domain system is supported",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"hostname\": \"dpsddve1.xyz.com\", \"port\": \"3009\", \"username\": \"{{dduser}}\", \"password\": \"{{ddpassword}}\"}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/datadomain-system-validation",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"datadomain-system-validation"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create credentials for the Data Domain system",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"type\": \"DATADOMAIN\", \"name\": \"testuser\", \"username\": \"{{dduser}}\", \"password\": \"{{ddpassword}}\"}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/credentials",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"credentials"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add the Data Domain server",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"testdd\",\r\n    \"type\": \"EXTERNALDATADOMAIN\",\r\n    \"address\": \"dpsddve1.xyz.com\",\r\n    \"port\": \"3009\",\r\n    \"credentials\": {\r\n        \"id\": \"5bcdea3c-1fc8-4d1d-8abd-88e1cd3b1d9b\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/inventory-sources",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"inventory-sources"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query storage system",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"testdd\",\r\n    \"type\": \"EXTERNALDATADOMAIN\",\r\n    \"address\": \"dpsddve1.xyz.com\",\r\n    \"port\": \"3009\",\r\n    \"credentials\": {\r\n        \"id\": \"5bcdea3c-1fc8-4d1d-8abd-88e1cd3b1d9b\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/storage-systems?filter=type in (\"DATA_DOMAIN_SYSTEM\")",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"storage-systems"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "type in (\"DATA_DOMAIN_SYSTEM\")"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Use Case 2 - Add vCenter",
+			"item": [
+				{
+					"name": "Step1 - Trust the server certificate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/certificates",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"certificates"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Determine if the Data Domain system is supported",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"hostname\": \"dpsddve1.xyz.com\", \"port\": \"3009\", \"username\": \"{{dduser}}\", \"password\": \"{{ddpassword}}\"}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/datadomain-system-validation",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"datadomain-system-validation"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create credentials for the Data Domain system",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"type\": \"DATADOMAIN\", \"name\": \"testuser\", \"username\": \"{{dduser}}\", \"password\": \"{{ddpassword}}\"}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/credentials",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"credentials"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add the Data Domain server",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"testdd\",\r\n    \"type\": \"EXTERNALDATADOMAIN\",\r\n    \"address\": \"dpsddve1.xyz.com\",\r\n    \"port\": \"3009\",\r\n    \"credentials\": {\r\n        \"id\": \"5bcdea3c-1fc8-4d1d-8abd-88e1cd3b1d9b\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/inventory-sources",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"inventory-sources"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query storage system",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"testdd\",\r\n    \"type\": \"EXTERNALDATADOMAIN\",\r\n    \"address\": \"dpsddve1.iac.ssc\",\r\n    \"port\": \"3009\",\r\n    \"credentials\": {\r\n        \"id\": \"5bcdea3c-1fc8-4d1d-8abd-88e1cd3b1d9b\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/storage-systems?filter=type in (\"DATA_DOMAIN_SYSTEM\")",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"storage-systems"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "type in (\"DATA_DOMAIN_SYSTEM\")"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Use Case 3 - Creating Protection Policy",
+			"item": [
+				{
+					"name": "Step1 - Query storage system",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"storage-system-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/storage-systems?filter=type in (\"DATA_DOMAIN_SYSTEM\")&name=\"{{dd-system}}\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"storage-systems"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "type in (\"DATA_DOMAIN_SYSTEM\")"
+								},
+								{
+									"key": "name",
+									"value": "\"{{dd-system}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step1 - Create Protection Policy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"protection-policy-example-{{$guid}}\",\r\n    \"description\": \"This is a sample for creating a policy.\",\r\n    \"assetType\": \"VMWARE_VIRTUAL_MACHINE\",\r\n    \"type\": \"ACTIVE\",\r\n    \"encrypted\": false,\r\n    \"enabled\": true,\r\n    \"priority\": 1,\r\n    \"dataConsistency\": \"CRASH_CONSISTENT\",\r\n    \"passive\": false,\r\n    \"forceFull\": false,\r\n    \"details\": {\r\n        \"vm\": {\r\n            \"protectionEngine\": \"VMDIRECT\"\r\n        }\r\n    },\r\n    \"stages\": [\r\n        {\r\n            \"id\": \"{{$guid}}\",\r\n            \"type\": \"PROTECTION\",\r\n            \"passive\": false,\r\n            \"attributes\": {},\r\n            \"target\": {\r\n                \"storageSystemId\": \"{{storage-system-id}}\",\r\n                \"dataTargetId\": null,\r\n                \"preferredInterfaceId\": \"fqdn\"\r\n            },\r\n            \"slaId\": null,\r\n            \"sourceStageId\": null,\r\n            \"operations\": [\r\n                {\r\n                    \"id\": \"{{$guid}}\",\r\n                    \"backupType\": \"SYNTHETIC_FULL\",\r\n                    \"schedule\": {\r\n                        \"frequency\": \"MONTHLY\",\r\n                        \"startTime\": \"2022-07-18T12:00:00.000Z\",\r\n                        \"duration\": \"PT10H\",\r\n                        \"dayOfMonth\": 1\r\n                    }\r\n                }],\r\n            \"retention\": {\r\n                \"id\": \"{{$guid}}\",\r\n                \"interval\": 3,\r\n                \"storageSystemRetentionLock\": false,\r\n                \"unit\": \"MONTH\"\r\n            }\r\n        }\r\n    ],\r\n    \"filterIds\": [],\r\n    \"credentials\": null,\r\n    \"slaId\": \"\"\r\n}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step3 - Get all policies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Use Case 4 - Assign VMs to a policy",
+			"item": [
+				{
+					"name": "Step1 - Get policy ID to add assets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"policy-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies?filter=name eq \"TEST_PLC1\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"TEST_PLC1\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step2 - Get asset ID to add to the policy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"asset-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets?filter=name eq \"web_01\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"web_01\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add asset to a policy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\"{{asset-id}}\"]"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies/{{policy-id}}/asset-assignments",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies",
+								"{{policy-id}}",
+								"asset-assignments"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Use Case 5 - Trigger manual backup of a Policy",
+			"item": [
+				{
+					"name": "Step1 - Get policy-id to trigger a backup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"policy-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies?filter=name eq \"PLC1\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"PLC1\"",
+									"description": "Enter your policy name within quotes"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Trigger manual backup of a policy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\t\"assetIds\": null,\r\n\t\t\"backupType\": \"FULL\",\r\n\t\t\"retention\": {\r\n\t\t\t\"interval\": 1,\r\n\t\t\t\"unit\": \"YEAR\"\r\n\t\t},\r\n\t\t\"disableProtectionPolicyProcessing\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies/{{policy-id}}/backups",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies",
+								"{{policy-id}}",
+								"backups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Trigger manual backup of a policy Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\t\"assetIds\": null,\r\n\t\t\"backupType\": \"FULL\",\r\n\t\t\"retention\": {\r\n\t\t\t\"interval\": 1,\r\n\t\t\t\"unit\": \"YEAR\"\r\n\t\t},\r\n\t\t\"disableProtectionPolicyProcessing\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies/{{policy-id}}/backups",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies",
+								"{{policy-id}}",
+								"backups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"assetIds\": [\"{{asset-id}}\"],\r\n    \"backupType\": \"FULL\",\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies/{{policy-id}}/protections",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies",
+								"{{policy-id}}",
+								"protections"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step1 - Get policy-id to trigger a backup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"policy-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies?filter=name eq \"BronzePLC\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"BronzePLC\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step3 - Get asset-id to trigger a backup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"asset-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies/{{policy-id}}/asset-assignments?filter=name eq \"raghava-rocky\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies",
+								"{{policy-id}}",
+								"asset-assignments"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"raghava-rocky\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Optional - Trigger manual backup of all clients in a policy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"assetIds\": null,\r\n    \"stages\": [{\r\n        \"id\": \"{{stage-id}}\",\r\n        \"retention\": {\r\n            \"interval\": 1,\r\n            \"unit\": \"DAY\"\r\n        },\r\n        \"operations\": [{ \r\n            \"backupType\": \"FULL\"\r\n        }]\r\n    }]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies/{{policy-id}}/protections",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies",
+								"{{policy-id}}",
+								"protections"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Use Case 6 - Trigger manual backup of a client",
+			"item": [
+				{
+					"name": "Step1 - Get asset-id and policy-id of a client",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"asset-id\", data.content[0].id);",
+									"pm.environment.set(\"policy-id\", data.content[0].protectionPolicyId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets?filter=name eq \"rj_sqlsrv\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"rj_sqlsrv\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step2 - Get policy stage-id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"stage-id\", data.stages[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies/{{policy-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies",
+								"{{policy-id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step3 - Trigger manual backup of a single client",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"assetIds\": [\"{{asset-id}}\"],\r\n    \"stages\": [{\r\n        \"id\": \"{{stage-id}}\",\r\n        \"retention\": {\r\n            \"interval\": 1,\r\n            \"unit\": \"DAY\"\r\n        },\r\n        \"operations\": [{ \r\n            \"backupType\": \"FULL\"\r\n        }]\r\n    }]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/protection-policies/{{policy-id}}/protections",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"protection-policies",
+								"{{policy-id}}",
+								"protections"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Use Case 7 - VM Image Level Restore - to New VM",
+			"item": [
+				{
+					"name": "Step1 - Get asset ID of source VM",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"source-asset-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets?filter=name eq \"rj_sqlsrv\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"rj_sqlsrv\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step2 - Get asset backup copies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"copy-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets/{{source-asset-id}}/copies",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets",
+								"{{source-asset-id}}",
+								"copies"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step3 - Get copy by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/copies/{{copy-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"copies",
+								"{{copy-id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step4 - Get Inventory sources",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"vcenter-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/inventory-sources?filter=type eq \"VCENTER\" and name eq \"vc.iac.ssc\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"inventory-sources"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "type eq \"VCENTER\" and name eq \"vc.iac.ssc\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step5 - Login vCenter for restore destination details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"vmware-api-session-id\", data.value);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{vcenter-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{vcenter-username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{vcenter-host}}:443/rest/com/vmware/cis/session",
+							"protocol": "https",
+							"host": [
+								"{{vcenter-host}}"
+							],
+							"port": "443",
+							"path": [
+								"rest",
+								"com",
+								"vmware",
+								"cis",
+								"session"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step6 - vCenter DC details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"datacenterMoref\", data.value[0].datacenter);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "vmware-api-session-id",
+								"value": "{{vmware-api-session-id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{vcenter-host}}/rest/vcenter/datacenter",
+							"protocol": "https",
+							"host": [
+								"{{vcenter-host}}"
+							],
+							"path": [
+								"rest",
+								"vcenter",
+								"datacenter"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step7 - vCenter Cluster details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"clusterMoref\", data.value[0].cluster);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "vmware-api-session-id",
+								"value": "{{vmware-api-session-id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{vcenter-host}}/rest/vcenter/cluster",
+							"protocol": "https",
+							"host": [
+								"{{vcenter-host}}"
+							],
+							"path": [
+								"rest",
+								"vcenter",
+								"cluster"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step8 - vCenter Host details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"hostMoref\", data.value[1].host);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "vmware-api-session-id",
+								"type": "text",
+								"value": "{{vmware-api-session-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{vcenter-host}}/rest/vcenter/host",
+							"protocol": "https",
+							"host": [
+								"{{vcenter-host}}"
+							],
+							"path": [
+								"rest",
+								"vcenter",
+								"host"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step9 - vCenter Datastore details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"dataStoreMoref\", data.value[6].datastore);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "vmware-api-session-id",
+								"type": "text",
+								"value": "{{vmware-api-session-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{vcenter-host}}/rest/vcenter/datastore",
+							"protocol": "https",
+							"host": [
+								"{{vcenter-host}}"
+							],
+							"path": [
+								"rest",
+								"vcenter",
+								"datastore"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step10 - Restore to new VM",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"Restore VM to New\",\r\n    \"copyId\": \"{{copy-id}}\",\r\n    \"restoreType\": \"TO_ALTERNATE\",\r\n    \"restoredCopiesDetails\": {\r\n      \"targetVmInfo\": {\r\n        \"inventorySourceId\": \"{{vcenter-id}}\",\r\n        \"vmName\": \"New-vm-RESTAPI-restored\",\r\n        \"dataCenterMoref\": \"{{datacenterMoref}}\",\r\n        \"clusterMoref\": \"{{clusterMoref}}\",\r\n        \"hostMoref\": \"{{hostMoref}}\",\r\n        \"dataStoreMoref\": \"{{dataStoreMoref}}\",\r\n        \"vmPowerOn\": false,\r\n        \"vmReconnectNic\": false\r\n      }\r\n    }\r\n  }"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/restored-copies",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"restored-copies"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Use Case 8 - VM Instant Restore",
+			"item": [
+				{
+					"name": "Step1 - Get an asset ID to of source VM",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"source-asset-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets?filter=name eq \"rj_sqlsrv\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"rj_sqlsrv\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step2 - Get asset backup copies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"copy-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets/{{source-asset-id}}/copies",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets",
+								"{{source-asset-id}}",
+								"copies"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step3 - Get copy by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/copies/{{copy-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"copies",
+								"{{copy-id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step4 - Get Inventory sources",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"vcenter-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/inventory-sources?filter=type eq \"VCENTER\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"inventory-sources"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "type eq \"VCENTER\""
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step5 - Login vCenter for restore destination details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"vmware-api-session-id\", data.value);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{vcenter-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{vcenter-username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{vcenter-host}}:443/rest/com/vmware/cis/session",
+							"protocol": "https",
+							"host": [
+								"{{vcenter-host}}"
+							],
+							"port": "443",
+							"path": [
+								"rest",
+								"com",
+								"vmware",
+								"cis",
+								"session"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step6 - vCenter DC details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"datacenterMoref\", data.value[0].datacenter);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "vmware-api-session-id",
+								"value": "{{vmware-api-session-id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{vcenter-host}}/rest/vcenter/datacenter",
+							"protocol": "https",
+							"host": [
+								"{{vcenter-host}}"
+							],
+							"path": [
+								"rest",
+								"vcenter",
+								"datacenter"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step7 - vCenter Cluster details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"clusterMoref\", data.value[0].cluster);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "vmware-api-session-id",
+								"value": "{{vmware-api-session-id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{vcenter-host}}/rest/vcenter/cluster",
+							"protocol": "https",
+							"host": [
+								"{{vcenter-host}}"
+							],
+							"path": [
+								"rest",
+								"vcenter",
+								"cluster"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step8 - vCenter Host details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"hostMoref\", data.value[1].host);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "vmware-api-session-id",
+								"type": "text",
+								"value": "{{vmware-api-session-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{vcenter-host}}/rest/vcenter/host",
+							"protocol": "https",
+							"host": [
+								"{{vcenter-host}}"
+							],
+							"path": [
+								"rest",
+								"vcenter",
+								"host"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step9 - vCenter Datastore details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"dataStoreMoref\", data.value[6].datastore);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "vmware-api-session-id",
+								"type": "text",
+								"value": "{{vmware-api-session-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{vcenter-host}}/rest/vcenter/datastore",
+							"protocol": "https",
+							"host": [
+								"{{vcenter-host}}"
+							],
+							"path": [
+								"rest",
+								"vcenter",
+								"datastore"
+							],
+							"query": [
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step10 - Restore to new VM",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"Restore VM to New\",\r\n    \"copyId\": \"{{copy-id}}\",\r\n    \"restoreType\": \"TO_ALTERNATE\",\r\n    \"restoredCopiesDetails\": {\r\n      \"targetVmInfo\": {\r\n        \"inventorySourceId\": \"{{vcenter-id}}\",\r\n        \"vmName\": \"New-vm-RESTAPI-restored\",\r\n        \"dataCenterMoref\": \"{{datacenterMoref}}\",\r\n        \"clusterMoref\": \"{{clusterMoref}}\",\r\n        \"hostMoref\": \"{{hostMoref}}\",\r\n        \"dataStoreMoref\": \"{{dataStoreMoref}}\",\r\n        \"vmPowerOn\": false,\r\n        \"vmReconnectNic\": false\r\n      }\r\n    }\r\n  }"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/restored-copies",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"restored-copies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step11 - Get a copy-id of the Instant Restore",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/restored-copies/?filter=copyId eq \"28769d4c-2b46-5f24-a76d-36b91c6846a6\" and restoreType eq \"INSTANT_ACCESS\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"restored-copies",
+								""
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "copyId eq \"28769d4c-2b46-5f24-a76d-36b91c6846a6\" and restoreType eq \"INSTANT_ACCESS\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step12 - Expire Instant Access restore",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"Restore VM to New\",\r\n    \"copyId\": \"{{copy-id}}\",\r\n    \"restoreType\": \"TO_ALTERNATE\",\r\n    \"restoredCopiesDetails\": {\r\n      \"targetVmInfo\": {\r\n        \"inventorySourceId\": \"{{vcenter-id}}\",\r\n        \"vmName\": \"New-vm-RESTAPI-restored\",\r\n        \"dataCenterMoref\": \"{{datacenterMoref}}\",\r\n        \"clusterMoref\": \"{{clusterMoref}}\",\r\n        \"hostMoref\": \"{{hostMoref}}\",\r\n        \"dataStoreMoref\": \"{{dataStoreMoref}}\",\r\n        \"vmPowerOn\": false,\r\n        \"vmReconnectNic\": false\r\n      }\r\n    }\r\n  }"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/restored-copies/3991d123-b7c3-41da-adcf-0c5f2a7e46a6/remove",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"restored-copies",
+								"3991d123-b7c3-41da-adcf-0c5f2a7e46a6",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Use Case 9 - Configure Application Agent",
+			"item": [
+				{
+					"name": "Step1 - Add Application Agent to PPDM",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"expiresAt\": \"2024-08-28T09:06:44.512Z\",\r\n    \"ip\": \"{{app-agent-ip-addr}}\"\r\n}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/whitelist",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"whitelist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step2 - Approve Application Agent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"state\": \"APPROVED\"\r\n}"
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/whitelist/{{app-agent-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"whitelist",
+								"{{app-agent-id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Use Case 10 - VM FLR",
+			"item": [
+				{
+					"name": "Step1 - Get asset ID of source VM",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"source-asset-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets?filter=name eq \"rj_sqlsrv\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"rj_sqlsrv\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step2 - Get backup copies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"copy-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets/{{source-asset-id}}/copies?filter=state eq \"IDLE\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets",
+								"{{source-asset-id}}",
+								"copies"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "state eq \"IDLE\""
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step3 - Get copy-id of backup copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/copies/{{copy-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"copies",
+								"{{copy-id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step4 - Get asset ID of target VM",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)",
+									"pm.environment.set(\"target-asset-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/assets?filter=name eq \"rj_sqlsrv\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"assets"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "name eq \"rj_sqlsrv\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step5 - Create FLR session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"flr-session-id\", data.flrSessionId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"copyId\": \"{{copy-id}}\",\r\n    \"targetVmAssetId\" : \"{{target-asset-id}}\",\r\n    \"targetUser\" : \"{{target-user}}\",\r\n    \"targetPassword\" : \"{{target-password}}\",\r\n    \"timeout\" : \"900\",\r\n    \"removeAgent\" : \"false\" \r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/flr-sessions",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"flr-sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Setp6 - Modify FLR session to browse files",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"browseDest\": true,\r\n    \"directory\" : \"C:\\\\\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/flr-sessions/{{flr-session-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"flr-sessions",
+								"{{flr-session-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Setp7 - Browse files and folders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/flr-sessions/{{flr-session-id}}/files",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"flr-sessions",
+								"{{flr-session-id}}",
+								"files"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Setp8 - Restore the files",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"flr-session-id\", data.flrSessionId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"targetDirectory\": \"C:\\\\temp\",\r\n    \"filePaths\" : [\"C:\\\\sqlncli.msi\"],\r\n    \"overwriteExisting\" : false,\r\n    \"restoreToOriginalPath\" : false\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/flr-sessions/{{flr-session-id}}/tasks",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"flr-sessions",
+								"{{flr-session-id}}",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step9 - Delete FLR session (optional)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " {{X-auth-token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/flr-sessions/{{flr-session-id}}",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"flr-sessions",
+								"{{flr-session-id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Use Case 11 - Sending alerts for ticketing",
+			"item": [
+				{
+					"name": "Get all Activities  - all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"activity-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/activities?orderby=createTime DESC&pageSize=100",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "category eq \"PROTECT\" and classType eq \"TASK\" and state eq \"COMPLETED\" and createdTime gt 2022-03-03T12:04:04.247710",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "createTime DESC"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get FAILED tasks Activities - last hour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var moment = require(\"moment\")\r",
+									"// pm.environment.set(\"pickUpTime\", moment().toISOString())\r",
+									"// pm.environment.set(\"pickUpTime\", moment().subtract(10, 'day').toISOString())\r",
+									"pm.environment.set(\"pickUpTime\", moment().subtract(1, 'hour').toISOString())"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/activities?pageSize=10000&orderby=createTime DESC&filter=category eq \"PROTECT\" and classType eq \"TASK\" and state eq \"COMPLETED\" and result.status eq \"FAILED\" and createTime gt \"{{pickUpTime}}\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								},
+								{
+									"key": "orderby",
+									"value": "createTime DESC"
+								},
+								{
+									"key": "filter",
+									"value": "category eq \"PROTECT\" and classType eq \"TASK\" and state eq \"COMPLETED\" and result.status eq \"FAILED\" and createTime gt \"{{pickUpTime}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get OK tasks Activities - last hour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var moment = require(\"moment\")\r",
+									"// pm.environment.set(\"pickUpTime\", moment().toISOString())\r",
+									"// pm.environment.set(\"pickUpTime\", moment().subtract(10, 'day').toISOString())\r",
+									"pm.environment.set(\"pickUpTime\", moment().subtract(1, 'hour').toISOString())"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/activities?pageSize=10000&orderby=createTime DESC&filter=category eq \"PROTECT\" and classType eq \"TASK\" and state eq \"COMPLETED\" and result.status eq \"OK\" and createTime gt \"{{pickUpTime}}\"",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								},
+								{
+									"key": "orderby",
+									"value": "createTime DESC"
+								},
+								{
+									"key": "filter",
+									"value": "category eq \"PROTECT\" and classType eq \"TASK\" and state eq \"COMPLETED\" and result.status eq \"OK\" and createTime gt \"{{pickUpTime}}\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Alerts - only failures",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"alert-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/alerts?pageSize=10000&filter=severity eq \"CRITICAL\" and postedTime gt 2021-03-03T12:04:04.247710",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"alerts"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								},
+								{
+									"key": "filter",
+									"value": "severity eq \"CRITICAL\" and postedTime gt 2021-03-03T12:04:04.247710"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get AuditLogs - All",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"data = JSON.parse(responseBody)\r",
+									"pm.environment.set(\"audit-id\", data.content[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{X-auth-token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{ppdmsrv}}:8443/api/v2/audit-logs?pageSize=10000",
+							"protocol": "https",
+							"host": [
+								"{{ppdmsrv}}"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"v2",
+								"audit-logs"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "queryfilter",
+									"disabled": true
+								},
+								{
+									"key": "orderby",
+									"value": "orderby",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10000"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
