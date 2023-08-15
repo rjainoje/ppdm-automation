@@ -1,6 +1,6 @@
 # Getting Started with PPDM REST API using Ansible Playbooks
 
-[Git repo](./ppdm-ansible-playbooks):
+[Git repo](/ppdm-ansible-playbooks):
 
 ## Introduction:
 Dell PowerProtect Data Manager (PPDM) is a robust data protection software that plays a pivotal role in safeguarding both on-premises and cloud workloads. Automating data protection tasks is becoming increasingly vital, and this blog post aims to guide you through the process of automating PPDM operations using Ansible Playbooks. While we previously explored how to interact with PPDM's REST API using Postman, we'll now delve into the world of Ansible Playbooks to achieve seamless and efficient automation.
