@@ -1,7 +1,7 @@
 # Getting Started with PPDM REST API using Postman Collections
 
 Here is the a blog post for detailed information https://www.dell.com/community/Blogs/Getting-Started-with-PPDM-REST-API-using-Postman-Collections/ba-p/8424744
-
+[Git repo](/ppdm-postman-collections):
 
 ## Prerequisites:
 

@@ -1,4 +1,4 @@
-# Getting Started with PPDM REST API using Python
+# External data logging to Splunk
 Will upload the files soon, check back in later
 
 

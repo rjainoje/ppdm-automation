@@ -38,7 +38,11 @@ This repository includes the following types of examples:
 
 * [ServiceNow Example](./ppdm-servicenow-example/servicenow-readme.md): Learn how to leverage PPDM's REST API with ServiceNow for streamlined incident management, ticketing, and reporting.
 
-* [Custom Dashboard](https://github.com/rjainoje/rjapp-backup-portal-example/blob/main/readme.md): Build a custom dashboard to visualise PPDM metrics and insights, providing an at-a-glance view of your data management environment.
+* [Custom Dashboard](./rjapp-backup-portal-example/dashboard-readme.md): Build a custom dashboard to visualise PPDM metrics and insights, providing an at-a-glance view of your data management environment.
+
+![](images/ppdm-dashboard.png)
+
+
 ![](images/ppdm-postman.png)
 
 ## Folder Structure
