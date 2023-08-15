@@ -1,0 +1,86 @@
+---
+- hosts: localhost
+  gather_facts: no
+# Following variables need to be passed as --extra-vars
+# ppdmsrv
+# ppdmusr
+# ppdmpwd
+# asset_name
+
+  vars:
+    asset_name: "asset_name"
+    filter: 'filter=name%20eq%20%22{{ asset_name }}%22'
+
+  tasks:
+    - name: Authenticate with PPDM and get Token
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/login"
+        method: POST
+        body:
+          username: '{{ ppdmusr }}'
+          password: '{{ ppdmpwd }}'
+        body_format: json
+        headers:
+          Content-Type: 'application/json'
+        validate_certs: no
+      register: response
+
+    - name: Getting asset & policy ID
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/assets?{{ filter }}"
+        method: GET
+        headers:
+          Content-Type: 'application/json'
+          Authorization: 'Bearer {{ response.json.access_token }}'
+        validate_certs: no
+      register: asset
+
+    - name: Assign variables
+      set_fact:
+        asset_id: "{{ asset.json.content.0.id }}"
+        policy_id: "{{ asset.json.content.0.protectionPolicyId }}"
+
+    - name: Getting stage ID
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/protection-policies/{{policy_id}}"
+        method: GET
+        headers:
+          Content-Type: 'application/json'
+          Authorization: 'Bearer {{ response.json.access_token }}'
+        validate_certs: no
+      register: stage
+
+    - name: Assign variables1
+      set_fact:
+        stage_id: "{{ stage.json.stages.0.id}}"
+
+    - name: Trigger the backup
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/protection-policies/{{policy_id}}/protections"
+        method: POST
+        body: >
+          { "assetIds": ["{{ asset_id }}"], "stages": [{"id": "{{ stage_id }}", "retention": {"interval": 1,"unit": "DAY"}, "operations": [{ "backupType": "FULL"}]}]}
+        body_format: json
+        headers:
+          Content-Type: 'application/json'
+          Authorization: 'Bearer {{ response.json.access_token }}'
+        validate_certs: no
+        status_code: 202
+      register: trigger
+
+    - name: Get Job status
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/activities/{{ trigger.json.results.0.activityId }}"
+        method: GET
+        headers:
+          Content-Type: 'application/json'
+          Authorization: 'Bearer {{ response.json.access_token }}'
+        validate_certs: no
+        status_code: 200
+      register: jobDetails
+      until: "'COMPLETED' in jobDetails.json.state" 
+      retries: 20
+      delay: 30
+
+    - debug:
+        msg: "Job status {{ jobDetails.json.result.status }}, bytes transferred {{ jobDetails.json.result.bytesTransferred }}"

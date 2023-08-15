@@ -1,0 +1,181 @@
+---
+- hosts: localhost
+  gather_facts: no
+# Following variables need to be passed as --extra-vars
+# ppdmsrv
+# ppdmusr
+# ppdmpwd
+# asset_name
+# vcenter_host
+# vuser
+# vpassword
+
+  vars:
+    filter: 'filter=name%20eq%20%22{{ asset_name }}%22'
+    filter1: 'filter=type%20eq%20%22VCENTER%22'
+    vcenter_host: 'vcenter_host'
+    target_vm: ''
+
+  tasks:
+    - name: Authenticate with PPDM and get Token
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/login"
+        method: POST
+        body:
+          username: '{{ ppdmusr }}'
+          password: '{{ ppdmpwd }}'
+        body_format: json
+        headers:
+          Content-Type: 'application/json'
+        validate_certs: no
+      register: response
+
+    - name: Assign token variable
+      set_fact:
+        login_token: "{{ response.json.access_token }}"
+
+    - name: Get an asset ID of the source VM
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/assets?{{ filter }}"
+        method: GET
+        headers:
+          Content-Type: 'application/json'
+          Authorization: 'Bearer {{ login_token }}'
+        validate_certs: no
+      register: asset
+
+    - name: Assign variables
+      set_fact:
+        asset_id: "{{ asset.json.content.0.id }}"
+
+    - name: Get latest backup ID
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/assets/{{ asset_id }}/copies"
+        method: GET
+        headers:
+          Content-Type: 'application/json'
+          Authorization: 'Bearer {{ login_token }}'
+        validate_certs: no
+      register: bkpcopy
+
+    - debug:
+            msg: "Backup ID {{ bkpcopy.json.content.0.id }} ended at {{ bkpcopy.json.content.0.endTime }}"
+
+    - name: Assign variables
+      set_fact:
+        copy_id: "{{ bkpcopy.json.content.0.id }}"
+
+    - name: Get vCenter ID
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/inventory-sources?{{ filter1 }}"
+        method: GET
+        headers:
+          Content-Type: 'application/json'
+          Authorization: 'Bearer {{ login_token }}'
+        validate_certs: no
+      register: vCenter
+
+    - name: Assign variables
+      set_fact:
+        vcenter_id: "{{ vCenter.json.content.0.id }}"
+
+    - name: Login to vCenter to gather details
+      uri:
+        url: "https://{{ vcenter_host }}:443/rest/com/vmware/cis/session"
+        force_basic_auth: yes
+        method: POST
+        user: '{{ vuser }}'
+        password: '{{ vpassword }}'
+        validate_certs: no
+      register: vsession
+
+    - name: Assign vsession variable
+      set_fact:
+        vsession_id: "{{ vsession.json.value }}"
+
+    - name: Get vCenter DC details
+      uri:
+        url: "https://{{ vcenter_host }}/rest/vcenter/datacenter"
+        force_basic_auth: yes
+        method: GET
+        headers:
+          vmware-api-session-id: "{{ vsession_id }}"
+        validate_certs: no
+      register: DCs
+
+    - name: Assign DC variable
+      set_fact:
+        dc_id: "{{ DCs.json.value.0.datacenter }}"
+
+    - name: Get vCenter Cluster details
+      uri:
+        url: "https://{{ vcenter_host }}/rest/vcenter/cluster"
+        force_basic_auth: yes
+        method: GET
+        headers:
+          vmware-api-session-id: "{{ vsession_id }}"
+        validate_certs: no
+      register: clusters
+
+    - name: Assign Cluster variable
+      set_fact:
+        cluster_id: "{{ clusters.json.value.0.cluster }}"
+
+    - name: Get vCenter Host details
+      uri:
+        url: "https://{{ vcenter_host }}/rest/vcenter/host"
+        force_basic_auth: yes
+        method: GET
+        headers:
+          vmware-api-session-id: "{{ vsession_id }}"
+        validate_certs: no
+      register: hosts
+
+    - name: Assign Host variable
+      set_fact:
+        host_id: "{{ hosts.json.value.3.host }}"
+
+    - name: Get vCenter Datastore details
+      uri:
+        url: "https://{{ vcenter_host }}/rest/vcenter/datastore"
+        force_basic_auth: yes
+        method: GET
+        headers:
+          vmware-api-session-id: "{{ vsession_id }}"
+        validate_certs: no
+      register: datastores
+
+    - name: Assign Datastore variable
+      set_fact:
+        datastore_id: "{{ datastores.json.value.9.datastore }}"
+
+    - name: Perform the restore
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/restored-copies"
+        method: POST
+        body:
+          description: "Restore VM to New"
+          copyId: "{{ copy_id }}"
+          restoreType: "TO_ALTERNATE"
+          restoredCopiesDetails:
+            targetVmInfo:
+              inventorySourceId: "{{ vcenter_id }}"
+              vmName: "Restored_{{ asset_name }}"
+              dataCenterMoref: "{{ dc_id }}"
+              clusterMoref: "{{ cluster_id }}"
+              hostMoref: "{{ host_id }}"
+              dataStoreMoref: "{{ datastore_id }}"
+              vmPowerOn: false
+              vmReconnectNic: false
+        body_format: json
+        headers:
+          Content-Type: 'application/json'
+          Authorization: 'Bearer {{ login_token }}'
+        validate_certs: no
+        status_code: 201
+      register: restore_job
+
+    - debug:
+            msg: "{{ restore_job }}"
+
+

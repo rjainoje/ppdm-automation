@@ -1,0 +1,74 @@
+---
+- hosts: localhost
+  gather_facts: no
+# Following variables need to be passed as --extra-vars
+# ppdmsrv
+# ppdmusr
+# ppdmpwd
+# policy_name
+# asset_name
+
+  vars:
+    filter: "filter=name%20eq%20%22{{ policy_name }}%22"
+    filter1: "filter=name%20eq%20%22{{ asset_name }}%22"
+
+  tasks:
+    - name: Authenticate with PPDM and get Token
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/login"
+        method: POST
+        body:
+          username: '{{ ppdmusr }}'
+          password: '{{ ppdmpwd }}'
+        body_format: json
+        headers:
+          Content-Type: 'application/json'
+        validate_certs: no
+      register: response
+
+    - name: Assign token variable
+      set_fact:
+        login_token: "{{ response.json.access_token }}"
+        
+    - name: Get Policy ID from Name
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/protection-policies?{{ filter }}"
+        method: GET
+        validate_certs: no
+        headers:
+          Authorization: "Bearer {{ login_token }}"
+          Content-Type: "application/json"
+      register: policy
+
+    - name: Assign policy variable
+      set_fact:
+        policy_id: "{{ policy.json.content.0.id }}"
+
+    - name: Get an asset ID of the VM
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/assets?{{ filter1 }}"
+        method: GET
+        headers:
+          Content-Type: 'application/json'
+          Authorization: 'Bearer {{ login_token }}'
+        validate_certs: no
+      register: asset
+
+    - name: Assign asset_id variable
+      set_fact:
+        asset_id: "{{ asset.json.content.0.id }}"
+
+    - name: Add Asset to Policy
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/protection-policies/{{ policy_id }}/asset-assignments"
+        method: POST
+        body:
+          - "{{ asset_id }}" 
+        body_format: json
+        headers:
+          Authorization: "Bearer {{ login_token }}"
+          Content-Type: "application/json"
+        validate_certs: no
+        status_code: 204
+      register: registration
+

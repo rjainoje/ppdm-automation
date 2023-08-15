@@ -1,36 +1,63 @@
-# Getting Started with PPDM REST API using Postman Collections
+# Automating Dell PowerProtect Data Manager Operations with Ansible Playbooks
 
-Here is the a blog post for detailed information https://www.dell.com/community/Blogs/Getting-Started-with-PPDM-REST-API-using-Postman-Collections/ba-p/8424744
+
+## Introduction:
+Dell PowerProtect Data Manager (PPDM) is a robust data protection software that plays a pivotal role in safeguarding both on-premises and cloud workloads. Automating data protection tasks is becoming increasingly vital, and this blog post aims to guide you through the process of automating PPDM operations using Ansible Playbooks. While we previously explored how to interact with PPDM's REST API using Postman, we'll now delve into the world of Ansible Playbooks to achieve seamless and efficient automation.
 
 
 ## Prerequisites:
+Before we dive into the automation process, let's ensure you have the necessary prerequisites in place:
 
-Before embarking on your journey to Dell PPDM automation using Postman, ensure that you have the following prerequisites in place:
+* A basic understanding of Dell PowerProtect Data Manager and its REST API.
+* Ansible installed on your system. If you need assistance with Ansible installation, you can refer to the official Ansible documentation.
+* Access to a Dell PowerProtect Data Manager instance for testing and experimentation purposes.
 
-* Functional Dell PowerProtect Data Manager (PPDM) Instance: Ensure that you have a fully operational PPDM instance accessible via a designated URL.
+## Getting Started with Ansible Playbooks for PPDM Automation:
+Ansible Playbooks are a powerful tool for automating a variety of tasks, including those in PPDM. In this blog post, we'll focus on automating the following operations:
 
-* Postman Application: Download and install the Postman application—a versatile and industry-standard API testing and automation tool, offered at no cost.
+Backup: Ansible playbook to perform ad-hoc backup of a client using REST API in PPDM.
+Restore: Ansile playbook for restoring a VM
+Policy Creation: Ansible playbook for creating a policy
+Client Registration: Ansible playbook for client registration
 
-## Step-by-Step
+## Setting Up the Environment:
+Before we begin, let's make sure you have the required environment set up:
 
-1. Obtain PPDM API Access Credentials:
-To initiate interactions with the PPDM API, the first step necessitates the acquisition of API access credentials, namely a username and password, from your PPDM instance. These credentials will serve as the authentication mechanism for your API requests.
+* Install Ansible on your machine by following the instructions provided in the official Ansible installation guide.
+* Clone the Git repository containing the Ansible Playbooks we'll be using for PPDM automation. You can find the Playbooks here. With your environment ready, let's dive into the automation process!
 
-2. Import the Postman Collection and Environment:
-Begin by downloading the pre-constructed Postman collection from GitHub repository. Import the collection into Postman by selecting the "Import" button and subsequently importing both the collection and environment files.
 
-3. Configure Environment Variables:
-Effectively configuring environment variables tailored to your specific PPDM environment is imperative. Variables encompassing PPDM server IP addresses, user credentials, passwords, vCenter details, and any other pertinent parameters should be updated. Review the list of variables and ensure each is appropriately amended to reflect your environment.
+## Executing Ansible Playbooks with Extra Vars
 
-4. Navigate through the Collection:
-Within the imported Postman collection, an array of API endpoints awaits your exploration. Organised into distinct folders, each folder corresponds to a unique resource type. These folders house an assortment of endpoints pertinent to the given resource type. Importantly, these API calls are pre-configured with requisite parameters, headers, authorization, filters, and request bodies.
+In this section, we'll guide you through the process of executing the Ansible Playbooks for automating various PPDM operations. Ansible allows us to pass extra variables (extra vars) to our Playbooks, making them flexible and adaptable to different scenarios. The required extra vars are listed in the playbooks.
 
-5. Execute Requests:
-Equipped with correctly configured environment variables and headers, you are poised to execute individual API requests from the collection. Your journey begins with the login request, a pivotal step in securing an authentication token. Subsequent requests hinge on the presence of this authentication token, thus reinforcing its significance. Gradually, you will advance to more intricate operations, such as initiating backups or orchestrating restores.
+* Open a terminal window
+* Navigate to the directory where you cloned the Git repository containing the Ansible Playbooks.
+* Run the following command, replacing the placeholders with your specific values:
 
-## Use Cases
 
-![](../images/ppdm-postman.png)
+1. Register a client
+```
+ansible-playbook register_client -e "ppdmsrv=<PPDM IP> ppdmusr=<username> ppdmpwd=<password> policy_name=<policy_name> asset_name=<asset>"
+```
+
+2. Create a policy
+```
+ansible-playbook create_policy -e "ppdmsrv=<PPDM IP> ppdmusr=<username> ppdmpwd=<password> policy_name=<policy_name> dd_name=<datadomain_name>"
+```
+
+3. Perform ad-hoc backup
+```
+ansible-playbook adhoc_backup -e "ppdmsrv=<PPDM IP> ppdmusr=<username> ppdmpwd=<password> asset_name=<asset>"
+```
+
+4. Perform VM restore
+```
+ansible-playbook restore_vm -e "ppdmsrv=<PPDM IP> ppdmusr=<username> ppdmpwd=<password> asset_name=<asset> vcenter_host=<vcenter> vuser=<vcenter user> vpassword=<vcenter pwd>"
+```
+
+
+![](../images/ppdm-asnible.png)
 
 
 

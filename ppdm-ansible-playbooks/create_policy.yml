@@ -1,0 +1,112 @@
+---
+- hosts: localhost
+  gather_facts: no
+# Following variables need to be passed as --extra-vars
+# ppdmsrv
+# ppdmusr
+# ppdmpwd
+# policy_name
+# dd_name
+
+  vars:
+    filter: 'filter=type%20eq%20%22DATA_DOMAIN_SYSTEM%22%20and%20name%20eq%20%22{{dd_name}}%22'
+
+  tasks:
+    - name: Authenticate with PPDM and get Token
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/login"
+        method: POST
+        body:
+          username: '{{ ppdmusr }}'
+          password: '{{ ppdmpwd }}'
+        body_format: json
+        headers:
+          Content-Type: 'application/json'
+        validate_certs: no
+      register: response
+
+    - name: Assign token variable
+      set_fact:
+        login_token: "{{ response.json.access_token }}"
+
+    - name: Get Data Domain system ID
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/storage-systems?{{ filter }}"
+        method: GET
+        headers:
+          Content-Type: 'application/json'
+          Authorization: 'Bearer {{ login_token }}'
+        validate_certs: no
+      register: datadomain
+
+    - name: Assign Data Domain variable
+      set_fact:
+        datadomain_id: "{{ datadomain.json.content.0.id }}"
+
+    - name: Create policy
+      uri:
+        url: "https://{{ ppdmsrv }}:8443/api/v2/protection-policies"
+        method: POST
+        body_format: json
+        headers:
+          Content-Type: 'application/json'
+          Authorization: 'Bearer {{ login_token }}'
+        validate_certs: no
+        body: >
+          {
+            "name": "{{ policy_name }}", 
+            "description": "This is a sample for creating a policy.",
+            "assetType": "VMWARE_VIRTUAL_MACHINE",
+            "type": "ACTIVE",
+            "encrypted": false,
+            "enabled": true,
+            "priority": 1,
+            "dataConsistency": "CRASH_CONSISTENT",
+            "passive": false,
+            "forceFull": false,
+            "details":
+              {
+                "vm": {
+                  "protectionEngine": "VMDIRECT"
+                }
+              },
+            "stages": [
+              {
+                "id": "{{ 99999999 | random | to_uuid }}",
+                "type": "PROTECTION",
+                "passive": false,
+                "attributes": {},
+                "target": {
+                  "storageSystemId": "{{datadomain_id}}",
+                  "dataTargetId": null,
+                  "preferredInterfaceId": "fqdn"
+                },
+                "slaId": null,
+                "sourceStageId": null,
+                "operations": [
+                  {
+                    "id": "{{ 99999999 | random | to_uuid }}",
+                    "backupType": "SYNTHETIC_FULL",
+                    "schedule": {
+                      "frequency": "MONTHLY",
+                      "startTime": "2022-07-18T12:00:00.000Z",
+                      "duration": "PT10H",
+                      "dayOfMonth": 1
+                    }
+                  }
+                ],
+                "retention": {
+                  "id": "{{ 99999999 | random | to_uuid }}",
+                  "interval": 3,
+                  "storageSystemRetentionLock": false,
+                  "unit": "MONTH"
+                }
+              }
+            ],
+            "filterIds": [],
+            "credentials": null,
+            "slaId": ""
+          }
+        status_code: 200
+        timeout: 120
+      register: policy_create
