@@ -1,8 +1,16 @@
-# Automating Dell PowerProtect Data Manager Operations with Ansible Playbooks
+# Getting Started with PPDM REST API using Ansible Playbooks
 
+[Git repo](./ppdm-ansible-playbooks):
 
 ## Introduction:
 Dell PowerProtect Data Manager (PPDM) is a robust data protection software that plays a pivotal role in safeguarding both on-premises and cloud workloads. Automating data protection tasks is becoming increasingly vital, and this blog post aims to guide you through the process of automating PPDM operations using Ansible Playbooks. While we previously explored how to interact with PPDM's REST API using Postman, we'll now delve into the world of Ansible Playbooks to achieve seamless and efficient automation.
+
+Ansible Playbooks are a powerful tool for automating a variety of tasks, including those in PPDM. In this blog post, we'll focus on automating the following operations:
+
+Backup: Ansible playbook to perform ad-hoc backup of a client using REST API in PPDM.
+Restore: Ansile playbook for restoring a VM
+Policy Creation: Ansible playbook for creating a policy
+Client Registration: Ansible playbook for client registration
 
 
 ## Prerequisites:
@@ -12,13 +20,6 @@ Before we dive into the automation process, let's ensure you have the necessary 
 * Ansible installed on your system. If you need assistance with Ansible installation, you can refer to the official Ansible documentation.
 * Access to a Dell PowerProtect Data Manager instance for testing and experimentation purposes.
 
-## Getting Started with Ansible Playbooks for PPDM Automation:
-Ansible Playbooks are a powerful tool for automating a variety of tasks, including those in PPDM. In this blog post, we'll focus on automating the following operations:
-
-Backup: Ansible playbook to perform ad-hoc backup of a client using REST API in PPDM.
-Restore: Ansile playbook for restoring a VM
-Policy Creation: Ansible playbook for creating a policy
-Client Registration: Ansible playbook for client registration
 
 ## Setting Up the Environment:
 Before we begin, let's make sure you have the required environment set up:
@@ -57,7 +58,7 @@ ansible-playbook restore_vm -e "ppdmsrv=<PPDM IP> ppdmusr=<username> ppdmpwd=<pa
 ```
 
 
-![](../images/ppdm-asnible.png)
+![](../images/ppdm-ansible.png)
 
 
 
